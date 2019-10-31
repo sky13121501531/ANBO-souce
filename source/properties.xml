@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="GB2312" standalone="yes" ?>
+<properties>
+    <device>
+	<deviceinfo index="1;2;3;4" logindex="1;2;3;4" devicetype="ATV" IP="172.16.10.101" baseIP="172.16.10.101" tunerid="0;1;2;3" cmdport="6000" tsport="10134;10135;10136;10137" cmdprotocol="tcp" tsprotocol="udp" recordlist="1;2;3;4"/>
+	<deviceinfo index="5;6;7;8" logindex="5;6;7;8" devicetype="ATV" IP="172.16.10.102" baseIP="172.16.10.102" tunerid="0;1;2;3" cmdport="6000" tsport="10234;10235;10236;10237" cmdprotocol="tcp" tsprotocol="udp" recordlist="5;6;7;8"/> 
+	<deviceinfo index="9;10;11;12" logindex="9;10;11;12" devicetype="RADIO" IP="172.16.10.103" baseIP="172.16.10.103" tunerid="0;1;2;3" cmdport="6000" tsport="10334;10335;10336;10337" cmdprotocol="tcp" tsprotocol="udp" recordlist="9;10;11;12"/>  
+	<deviceinfo index="13;14;15;16" logindex="13;14;15;16" devicetype="RADIO" IP="172.16.10.104" baseIP="172.16.10.104" tunerid="0;1;2;3" cmdport="6000" tsport="10434;10435;10436;10437" cmdprotocol="tcp" tsprotocol="udp" recordlist="13;14;15;16"/>  
+	<deviceinfo index="17" logindex="17" devicetype="ATV" IP="192.168.10.137" baseIP="192.168.10.137" tunerid="1" cmdport="6500" tsport="" cmdprotocol="tcp" tsprotocol="" recordlist=""/>  
+	<deviceinfo index="18" logindex="18" devicetype="RADIO" IP="192.168.10.137" baseIP="192.168.10.137" tunerid="1" cmdport="6500" tsport="" cmdprotocol="tcp" tsprotocol="" recordlist=""/>  
+    </device>
+    <task>
+        <taskinfo tasktype="TSAnalyze" devicelist="" deviceshare="no" />
+        <taskinfo tasktype="ATVChannelScanQueryTask" devicelist="17;18" deviceshare="no" />
+        <taskinfo tasktype="StreamRealtimeQueryTask" devicelist="1;9" deviceshare="no" />
+        <taskinfo tasktype="StreamRealtimeRoundQueryTask" devicelist="1;9" deviceshare="no" />
+        <taskinfo tasktype="AutoRecord" devicelist="2;3;4;5;6;7;8;10;11;12;13;14;15;16" deviceshare="no" />
+        <taskinfo tasktype="TaskRecord" devicelist="2;3;4;5;6;7;8;10;11;12;13;14;15;16" deviceshare="no" />
+        <taskinfo tasktype="QualityRealtimeQueryTask" devicelist="17;18" deviceshare="no" />
+        <taskinfo tasktype="QualityTask" devicelist="17;18" deviceshare="no" />
+        <taskinfo tasktype="SpectrumScanTask" devicelist="17;18" deviceshare="no" />
+        <taskinfo tasktype="SpectrumTask" devicelist="17;18" deviceshare="no" />
+    </task>
+    <db>
+        <dbsource type="mssql" ip="." port="8306" username="sa" pwd="" dbname="vsdvb" connum="40" />
+    </db>
+    <CASSMS>
+      <share directory="c:/vscttb/cassms/" httppath="/ok/" />
+      <CAS IP="10.1.2.19" port="80" path="/cas/" />
+      <SMS IP="" port="" URL="" />
+    </CASSMS>
+    <alarmrec>
+      <recinfo tvdeciceid="88" radiodeciceid="66" expiredays="3" reclength="40"/>
+    </alarmrec>
+    <radiodevalarm>
+      <paraminfo unittime="5" alarmrate="0.9" unalarmrate="0.1"/>
+    </radiodevalarm>
+    <snmp>
+	<refreshinterval>10</refreshinterval>
+	<filepath>c:/vscttb/snmp/DeviceChk.xml</filepath>
+    </snmp>
+	<NewFreqAlarm>
+        <param errnewfreq=""  oknewfreq="" />
+    </NewFreqAlarm>
+    <center>
+      <centercode type="center" srccode="900000X20" url="http://192.168.10.67:8007/New_Anbo/xmlReceiver/upload">900000X20</centercode>    
+	  <centercode type="ownercenter" rccode="110000Q01" url="http://10.1.101.14:8080/anboweb/xmlReceiver/upload">110000Q01</centercode>
+    </center>
+</properties>
