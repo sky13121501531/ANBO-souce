@@ -53,7 +53,7 @@ AlarmMgr::AlarmMgr(void)
 			StypeID.head = StrUtil::Int2Str(checkparam.DVBType)+std::string("_")+checkparam.DeviceID+std::string("_")+checkparam.ChannelID+std::string("_");
 			StypeID.type = checkparam.TypeID;
 			paramid=StrUtil::Int2Str(checkparam.DVBType)+std::string("_")+checkparam.DeviceID+std::string("_")+checkparam.ChannelID+std::string("_")+checkparam.TypeID;//报警类型标识
-			checkparam.mode = "1";
+			checkparam.mode = "1";/*处理僵尸报警信息--重启主程序*/
 			CheckAlarm(checkparam,false);	
 		}
 		else /*if (checkparam.AlarmType==ALARM_EQUIPMENT)*/
