@@ -1543,10 +1543,11 @@ bool ATVHTTPDeviceAccess::SetAlarmThreshold()
 							<VolumeLowValue>5</VolumeLowValue>\
 							<AudioLostValue>3</AudioLostValue>\
 							<AudioUnsualLastTime>200</AudioUnsualLastTime>\
+							<LostSignal>500</LostSignal>\
 							</ThresholdInfo>\
 							</Data>\
 							</Msg>";
-	std::string strDevIP;
+	std::string strDevIP,strAudioPower,strSignalThresholdRet;
 	std::list<int> devIDList;
 
 	PROPMANAGER::instance()->GetDeviceIP(DeviceId, strDevIP);
@@ -1561,7 +1562,16 @@ bool ATVHTTPDeviceAccess::SetAlarmThreshold()
 	if(devIDList.front() != DeviceId)
 		return false;
 
-
+	strAudioPower = PROPMANAGER::instance()->GetTVAudioPowerRet();//GetSignalThresholdRet
+	if(strAudioPower=="")
+	{
+		strAudioPower = "60";
+	}
+	strSignalThresholdRet = PROPMANAGER::instance()->GetSignalThresholdRet();
+	if(strSignalThresholdRet=="")
+	{
+		strSignalThresholdRet = "500";
+	}
 	XmlParser srcParser;
 	srcParser.Set_xml(strSrcXml);
 	int tmpDeviceID = 0;
@@ -1573,9 +1583,9 @@ bool ATVHTTPDeviceAccess::SetAlarmThreshold()
 	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/FreezeSimilar"), "950");
 	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/VolumeHighValue"), "100");
 	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/VolumeLowValue"), "5");
-	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/AudioLostValue"), "3");
+	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/AudioLostValue"), strAudioPower.c_str());
 	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/AudioUnsualLastTime"), "500");
-
+	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/LostSignal"), strSignalThresholdRet.c_str());
 	string strDeviceXml;
 	srcParser.SaveToString(strDeviceXml);
 	string strRetDeviceXml;

@@ -53,7 +53,7 @@ AlarmMgr::AlarmMgr(void)
 			StypeID.head = StrUtil::Int2Str(checkparam.DVBType)+std::string("_")+checkparam.DeviceID+std::string("_")+checkparam.ChannelID+std::string("_");
 			StypeID.type = checkparam.TypeID;
 			paramid=StrUtil::Int2Str(checkparam.DVBType)+std::string("_")+checkparam.DeviceID+std::string("_")+checkparam.ChannelID+std::string("_")+checkparam.TypeID;//报警类型标识
-			checkparam.mode = "1";/*处理僵尸报警信息--重启主程序*/
+			checkparam.mode = "1";
 			CheckAlarm(checkparam,false);	
 		}
 		else /*if (checkparam.AlarmType==ALARM_EQUIPMENT)*/
@@ -278,8 +278,9 @@ bool AlarmMgr::CheckAlarm(sCheckParam& checkparam,bool IsConvert)
                 {
                     CreateEQUIPMENTAlarmXML(tmpParam,alarmxml);
                 }
-
-				OSFunction::ExitProcess("板卡恢复");
+				
+				/*OSFunction::ExitProcess("板卡恢复");*/
+				//exit(0);
             }
         }
         else if (checkparam.mode == "0")
@@ -1107,21 +1108,33 @@ int AlarmMgr::CheckProgramAlarm( time_t curTime,vector<sCheckParam>& vecParam,ti
 	//先移除判断时间点回退持续时间之前的异态数据
 	//ProgramMutex.acquire();
 	/*反复上报解除，处理逻辑*/
-	int TmpCount=0;
+	int TmpCount=0,m_FlagNum = 0;
 	time_t tmepTime = time(0);
 	bool isRelease = false;
 	if(IsAlarmed(typeID))/*解报*/
 	{
 		time_t TmptimeSame = vecParam[0].CheckTime;
-		bool isReal = false;
+		bool isReal = false,tmpflag = false;
 		int TmpNum = 0;
 		if(vecParam[0].mode=="1")
 		{
 			TmpCount = 1;
 		}
+		if(vecParam[0].TypeID=="12" || vecParam[0].TypeID=="24")/*电视无伴音，广播无声音*/
+		{
+			m_FlagNum = 4;
+		}
+		else if(vecParam[0].TypeID=="10" || vecParam[0].TypeID=="23")/*电视无载波，广播无载波*/
+		{
+			m_FlagNum = 8;
+		}
+		else
+		{
+			m_FlagNum = 5;
+		}
 		for(int i=0;i<vecParam.size();i++)
 		{
-			if(TimeUtil::DiffSecond(TmptimeSame,vecParam[i].CheckTime)==0)
+			if(TimeUtil::DiffSecond(TmptimeSame,vecParam[i].CheckTime)==0)/*1秒多条信息*/
 			{
 				TmpNum += StrUtil::Str2Int(vecParam[i].mode);
 				if(TmpNum==1)
@@ -1130,31 +1143,51 @@ int AlarmMgr::CheckProgramAlarm( time_t curTime,vector<sCheckParam>& vecParam,ti
 					isReal = true;
 				}
 			}
-			else
+			else/*每次不同时间点信息的第一条mode为0*/
 			{
 				int DiffCount = 1;
 				DiffCount = TimeUtil::DiffSecond(vecParam[i].CheckTime,TmptimeSame);
-				if(isReal)/*确保解报连续性，超过三秒，按解报3秒*/
+				if(isReal)
 				{
 					TmpCount += DiffCount;
-					if(DiffCount>=3)
+					if(DiffCount>=3)/*确保解报连续性，超过三秒，按解报3秒*/  
 					{	
 						tmepTime = vecParam[i].CheckTime - TmpCount;
 						isRelease = true;
 						break;
 					}
+					tmpflag = true;
 				}
 				else
 				{
-					TmpCount = 0;
+					if(vecParam[i].TypeID=="12" || vecParam[i].TypeID=="24")/*电视无伴音，广播无声音*/
+					{
+						if(!tmpflag)/*连续两条信息为报警---计数清零*/
+						{
+							TmpCount = 0;
+						}
+						tmpflag = false;
+					}
+					else
+					{
+						TmpCount = 0;
+					}
 				}
-				if(TmpCount>=4)/*时间上连续有报有解4次----解除*/
+				if(TmpCount>=m_FlagNum)/*时间上连续有报有解----解除(依据实际环境区别对待)*/
 				{
 					tmepTime = vecParam[i].CheckTime - TmpCount;
 					isRelease = true;
 					break;
 				}
-				isReal = false;
+				/*1秒单条信息*/
+				if(vecParam[i].mode=="1")
+				{
+					isReal = true;
+				}
+				else
+				{
+					isReal = false;
+				}
 			}
 			TmptimeSame = vecParam[i].CheckTime;
 		}
@@ -1195,7 +1228,7 @@ int AlarmMgr::CheckProgramAlarm( time_t curTime,vector<sCheckParam>& vecParam,ti
 	}
 	if(isRelease && IsAlarmed(typeID))
 	{
-		if(strmode == "0")
+		if(strmode=="0")
 		{
 			strmode = "1";
 		}
@@ -1275,7 +1308,7 @@ int AlarmMgr::CheckProgramAlarm( time_t curTime,vector<sCheckParam>& vecParam,ti
 	}
 	if (vecParam.size()>0 && !IsAlarmed(typeID))
 	{
-		if((strmode == "0") && (/*ParamNum >= AlarmCheckNum || */(alarmlasttime-alarmfirsttime >= duration)&&(ParamNum>=AlarmCheckNum))&&(time(0)-alarmlasttime<=1))
+		if((strmode == "0") && /*ParamNum >= AlarmCheckNum || */(alarmlasttime-alarmfirsttime >= duration)&&(ParamNum>=AlarmCheckNum)&&(time(0)-alarmlasttime<=1))
 		{
 			alarmtime=time(0)-duration;
 			RUNPLANINFOMGR::instance()->CheckAlarmTime(tempDvbType,tempChanID,alarmtime);		//判断报警时间是否在运行图时间内
@@ -1327,6 +1360,10 @@ int AlarmMgr::CheckProgramAlarm( time_t curTime,vector<sCheckParam>& vecParam,ti
 			else if( StypeID.type == "11")
 			{
 				alarmtime = alarmfirsttime - 2;
+			}
+			else if( StypeID.type == "24" ||  StypeID.type == "12")/*板子优化声音报警前，根据目前情况，主控提8s*/
+			{
+				alarmtime = alarmfirsttime - 6;
 			}
 			else
 			    alarmtime = alarmfirsttime + 2;

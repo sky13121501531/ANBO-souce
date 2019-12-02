@@ -527,6 +527,9 @@ bool PropManager::InitiateDeviceInfo()
 					mXmlProp.GetAttrNode(nodeNext,"recordlist",recordlist);
                     mXmlProp.GetAttrNode(nodeNext,"isSpectrum",IsSpecTrumFlag);
                     mXmlProp.GetAttrNode(nodeNext,"SpectrumRetPlus",SpecTrumRet);
+					mXmlProp.GetAttrNode(nodeNext,"TVAudioPower",TVAUDIOPower);
+					mXmlProp.GetAttrNode(nodeNext,"FMAudioPower",FMAUDIOPower);
+					mXmlProp.GetAttrNode(nodeNext,"SignalThreshold",mSignalThreshold);
 					std::vector<int> VecIndex,VecLogindex,VecRecordList,VecTsportList,VecTuneridList;
 					SeparateStrVec(strdeviceid, VecIndex);
 					SeparateStrVec(logindex, VecLogindex);

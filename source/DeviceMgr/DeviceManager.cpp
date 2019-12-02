@@ -60,8 +60,9 @@ int DeviceManager::svc()
 		time_t currentTime = time(0);//当前时间
 		std::string strCurTime = TimeUtil::DateTimeToStr(currentTime);
 		
-		if (abs(TimeUtil::DiffMinute(strCurTime,mNextRunTime)) < 3)//与重启时间上下不超过3分钟
+		if (abs(TimeUtil::DiffSecond(strCurTime,mNextRunTime)) < 3)//与重启时间上下不超过3分钟
 		{
+
 			RebootDevice();					//重启所有板卡			
 			SetNextRunTime();				//设置下次运行时间
 			OSFunction::Sleep(60*30);		//每检查完一次停止30分钟

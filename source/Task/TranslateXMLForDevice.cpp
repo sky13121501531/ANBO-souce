@@ -915,8 +915,8 @@ std::vector<std::string> TranslateXMLForDevice::TranslateRoundRecordXML(std::str
 	 float mNowEndFreq=0.0f;              //当前频谱段的结束频点
 	 float mNowFreq=0.0f;                 //当前频谱段内的当前的频点
 	 int mIntevalLen;                //每段的长度
-	 string mTaskType;
-
+	 string mTaskType,mTaskRBW,mTaskVBW;
+	
 	 string DvbType,STD,SymbolRate;
 	 string templen("0");
 	 XmlParser parser(strStdXML.c_str());
@@ -928,8 +928,8 @@ std::vector<std::string> TranslateXMLForDevice::TranslateRoundRecordXML(std::str
 	 parser.GetAttrNode(SpectrumNode,"StepFreq",mStepFreq);
 	 parser.GetAttrNode(SpectrumNode,"Steps",templen);
 	 parser.GetAttrNode(SpectrumNode,"TaskType",mTaskType);
-	 //parser.GetAttrNode(SpectrumNode,"STD",STD);
-	 //parser.GetAttrNode(SpectrumNode,"SymbolRate",SymbolRate);
+	 parser.GetAttrNode(SpectrumNode,"RBW",mTaskRBW);
+	 parser.GetAttrNode(SpectrumNode,"VBW",mTaskVBW);
 
 	 if(mStepFreq<=0)
 	 {
@@ -1045,6 +1045,8 @@ std::vector<std::string> TranslateXMLForDevice::TranslateRoundRecordXML(std::str
 	 retParser.SetAttrNode("SymbolRate",SymbolRate,QuaryNode);
 	 retParser.SetAttrNode("StartFreq",mStartFreq,QuaryNode);
 	 retParser.SetAttrNode("EndFreq",mEndFreq,QuaryNode);
+	 retParser.SetAttrNode("RBW",mTaskRBW,QuaryNode);
+	 retParser.SetAttrNode("VBW",mTaskVBW,QuaryNode);
 	 retParser.SetAttrNode("StepFreq",mStepFreq,QuaryNode);
 	 retParser.SetAttrNode("WorkType",mTaskType,QuaryNode);//Note:按标准频道还是按步长
 

@@ -27,6 +27,7 @@ int AllSetTime::open( void* )
 
 int AllSetTime::svc()
 {
+	ACE_DEBUG ((LM_DEBUG,"(%T | %t)时间校时线程开始执行 !\n"));
 	while(bFlag)
 	{
 		Sleep(100);

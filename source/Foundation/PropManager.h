@@ -101,8 +101,12 @@ public:
 	//获得默认的DstCode和SrcCode
 	std::string GetDefDstCode(eDVBType dvbtype) {return mDefDstCode[dvbtype];};
 	std::string GetDefSrcCode(eDVBType dvbtype) {return mDefSrcCode[dvbtype];};
+
     std::string GetIsSpectrumFlag(void)	{return IsSpecTrumFlag;};//SpecTrumRet
     std::string GetSpectrumLitRet(void)	{return SpecTrumRet;};
+	std::string GetTVAudioPowerRet(void)	{return TVAUDIOPower;};
+	std::string GetFMAudioPowerRet(void)	{return FMAUDIOPower;};
+	std::string GetSignalThresholdRet(void)	{return mSignalThreshold;};
     int GetMonitorDevNum() {return mMonitorDevInfo.size();};
     bool GetDevMonitorInfo(int index,sDeviceInfo& DeviceInfo);
 	//任务属性
@@ -417,6 +421,10 @@ private:
 
     std::string IsSpecTrumFlag;//是否通过中间件给频谱仪发指令；  0,1,2:本机直接通信仪器   其它通过中间件
     std::string SpecTrumRet;
+	std::string TVAUDIOPower;
+	std::string FMAUDIOPower;
+	std::string mSignalThreshold;
+
 };
 typedef ACE_Singleton <PropManager, ACE_Thread_Mutex>  PROPMANAGER;
 #endif

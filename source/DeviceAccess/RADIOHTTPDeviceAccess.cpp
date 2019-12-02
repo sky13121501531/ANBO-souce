@@ -1832,10 +1832,11 @@ bool RADIOHTTPDeviceAccess::SetAlarmThreshold()
 							<VolumeLowValue>5</VolumeLowValue>\
 							<AudioLostValue>3</AudioLostValue>\
 							<AudioUnsualLastTime>200</AudioUnsualLastTime>\
+							<LostSignal>500</LostSignal>\
 							</ThresholdInfo>\
 							</Data>\
 							</Msg>";
-	std::string strDevIP;
+	std::string strDevIP,strAudioPower,strRadioSignalThresholdRet;
 	std::list<int> devIDList;
 
 	PROPMANAGER::instance()->GetDeviceIP(DeviceId, strDevIP);
@@ -1850,7 +1851,16 @@ bool RADIOHTTPDeviceAccess::SetAlarmThreshold()
 	if(devIDList.front() != DeviceId)
 		return false;
 
-
+	strAudioPower = PROPMANAGER::instance()->GetFMAudioPowerRet();
+	if(strAudioPower=="")
+	{
+		strAudioPower = "100";
+	}
+	strRadioSignalThresholdRet = PROPMANAGER::instance()->GetSignalThresholdRet();
+	if(strRadioSignalThresholdRet=="")
+	{
+		strRadioSignalThresholdRet = "500";
+	}
 	XmlParser srcParser;
 	srcParser.Set_xml(strSrcXml);
 	int tmpDeviceID = 0;
@@ -1862,8 +1872,9 @@ bool RADIOHTTPDeviceAccess::SetAlarmThreshold()
 	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/FreezeSimilar"), "990");
 	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/VolumeHighValue"), "100");
 	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/VolumeLowValue"), "5");
-	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/AudioLostValue"), "3");
+	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/AudioLostValue"), strAudioPower.c_str());
 	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/AudioUnsualLastTime"), "500");
+	srcParser.SetNodeText(srcParser.GetNodeFromPath("Msg/Data/ThresholdInfo/LostSignal"), strRadioSignalThresholdRet.c_str());
 
 	string strDeviceXml;
 	srcParser.SaveToString(strDeviceXml);
