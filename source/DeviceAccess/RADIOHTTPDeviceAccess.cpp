@@ -801,7 +801,7 @@ bool RADIOHTTPDeviceAccess::GetSpectrumRetXML(const std::string& strCmdMsg,std::
 		MEASureCmd += "0";//参数1------Type [0,1,2],0-normal,1-return,2-DPS
 		MEASureCmd += ",";
 		MEASureCmd += StrUtil::Int2Str(SetMidFreq);//参数2: FreqHz ，单位固定为Hz
-		MEASureCmd += ",";
+		MEASureCmd += "Hz,";
 		if(SpecType== 1 || SpecType==2)
 		{
 			if(SpanFreq>206*1000000)
@@ -810,7 +810,7 @@ bool RADIOHTTPDeviceAccess::GetSpectrumRetXML(const std::string& strCmdMsg,std::
 			}
 		}
 		MEASureCmd += StrUtil::Int2Str(SpanFreq);//参数3: SpanHz ，单位固定为Hz，Type=1 或 2 时，最大扫宽为206MHz
-		MEASureCmd += ",";
+		MEASureCmd += "Hz,";
 		MEASureCmd += "0"/*"auto-att"*/;//参数4: Att[0-30, auto-att] ，单位dB//注:auto-att 时，须填写有效的RFE
 		MEASureCmd += ",";
 		MEASureCmd += "ampoff";//参数5: Amp[“ampoff”,”ampon”] ，0-放大器关，1-放大器开

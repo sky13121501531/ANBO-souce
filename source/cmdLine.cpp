@@ -14,7 +14,7 @@ using namespace std;
 void PrintTitle (void)
 {
 	cout<<"\t*****************************************************************"<<endl;;
-	cout<<"\t* VSCTTB   [CTTB] wacth and measure system]"<<endl;
+	cout<<"\t* VSCTTB   [ATV--RADIO] wacth and measure system]"<<endl;
 	cout<<"\t* Version:"<<VSCTTB_VERSION<<endl;
 	cout<<"\t*\t"<<VSCTTB_URL<<endl;
 	cout<<"\t*\t"<<VSCTTB_COPYRIGHT<<endl;

@@ -1361,10 +1361,10 @@ int AlarmMgr::CheckProgramAlarm( time_t curTime,vector<sCheckParam>& vecParam,ti
 			{
 				alarmtime = alarmfirsttime - 2;
 			}
-			else if( StypeID.type == "24" ||  StypeID.type == "12")/*板子优化声音报警前，根据目前情况，主控提8s*/
-			{
-				alarmtime = alarmfirsttime - 6;
-			}
+			//else if( StypeID.type == "24" ||  StypeID.type == "12")/*板子优化声音报警前，根据目前情况，主控提8s*/
+			//{
+			//	alarmtime = alarmfirsttime - 6;
+			//}
 			else
 			    alarmtime = alarmfirsttime + 2;
 			AddAlarm(typeID);

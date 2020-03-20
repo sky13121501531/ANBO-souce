@@ -60,11 +60,11 @@ int SpecTrumOrderSet::svc()
                 {
 				case 1://ATV频道扫描  FgNum==1  
                     //SpecOrderSet = "MEASure:SPECtrum:SETTing 0,452500000,805500000,auto-att,ampoff,1MHz,300KHz,average,1000,fft,auto,806,0,0,0,0\r\n";
-					SpecOrderSet = "MEASure:SPECtrum:SETTing 0,454000000,812000000,auto-att,ampoff,3MHz,100KHz,average,1000,fft,auto,813,0,0,0,0";
+					SpecOrderSet = "MEASure:SPECtrum:SETTing 0,454000000Hz,812000000Hz,auto-att,ampoff,3MHz,100KHz,average,1000,fft,auto,813,0,0,0,0";
 					SpecOrderSet += "\r\n";
 					break;
                 case 2://RADIO频道扫描  FgNum==2
-                    SpecOrderSet = "MEASure:SPECtrum:SETTing 0,97500000,21000000,auto-att,ampoff,30KHz,10KHz,average,1000,fft,auto,211,0,0,0,0";
+                    SpecOrderSet = "MEASure:SPECtrum:SETTing 0,97500000Hz,21000000Hz,auto-att,ampoff,30KHz,10KHz,average,1000,fft,auto,211,0,0,0,0";
                     break;
                 case 3://ATV-CNR指标  FgNum==3
                     SpecOrderSet = "MEASure:TV:CNR:SETTing ";

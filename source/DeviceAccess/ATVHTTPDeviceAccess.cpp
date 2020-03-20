@@ -1806,7 +1806,7 @@ void ATVHTTPDeviceAccess::GetATVSpecTrumParmSet(SpectrumParm parmSet,string &MEA
 	MEASureCmd += "0";//参数1------Type [0,1,2],0-normal,1-return,2-DPS
 	MEASureCmd += ",";
 	MEASureCmd += StrUtil::Int2Str(SetMidFreq);//参数2: FreqHz ，单位固定为Hz
-	MEASureCmd += ",";
+	MEASureCmd += "Hz,";
 	if(parmSet.SpecType== 1 || parmSet.SpecType==2)
 	{
 		if(SpanFreq>206*1000000)
@@ -1815,7 +1815,7 @@ void ATVHTTPDeviceAccess::GetATVSpecTrumParmSet(SpectrumParm parmSet,string &MEA
 		}
 	}
 	MEASureCmd += StrUtil::Int2Str(SpanFreq);//参数3: SpanHz ，单位固定为Hz，Type=1 或 2 时，最大扫宽为206MHz
-	MEASureCmd += ",";
+	MEASureCmd += "Hz,";
 	MEASureCmd += "auto-att";//参数4: Att[0-30, auto-att] ，单位dB//注:auto-att 时，须填写有效的RFE
 	MEASureCmd += ",";
 	MEASureCmd += "ampoff";//参数5: Amp[“ampoff”,”ampon”] ，0-放大器关，1-放大器开
